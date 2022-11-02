@@ -86,6 +86,9 @@ instance Parsec TotalIndexState where
         add _           (TokTimestamp ts) = TIS (IndexStateTime ts) Map.empty
         add (TIS def m) (TokRepo rn idx)  = TIS def (Map.insert rn idx m)
 
+instance Semigroup TotalIndexState where
+    (TIS s1 rs1) <> (TIS s2 rs2) = TIS (s1 <> s2) (Map.unionWith (<>) rs1 rs2)
+
 -- used in Parsec TotalIndexState implementation
 data Tok
     = TokRepo RepoName RepoIndexState
@@ -136,3 +139,7 @@ instance Parsec RepoIndexState where
     parsec = parseHead <|> parseTime where
         parseHead = IndexStateHead <$ P.string "HEAD"
         parseTime = IndexStateTime <$> parsec
+
+-- Take the first value when combining
+instance Semigroup RepoIndexState where
+    s1 <> _ = s1

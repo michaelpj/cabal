@@ -144,7 +144,7 @@ projectFreezeConfig elaboratedPlan totalIndexState activeRepos0 = mempty
     { projectConfigShared = mempty
         { projectConfigConstraints =
           concat (Map.elems (projectFreezeConstraints elaboratedPlan))
-        , projectConfigIndexState  = Flag totalIndexState
+        , projectConfigIndexState  = Just totalIndexState
         , projectConfigActiveRepos = Flag activeRepos
         }
     }

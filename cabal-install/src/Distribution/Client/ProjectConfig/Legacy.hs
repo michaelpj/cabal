@@ -61,7 +61,7 @@ import Distribution.Simple.Compiler
          ( OptimisationLevel(..), DebugInfoLevel(..), CompilerInfo(..) )
 import Distribution.Simple.InstallDirs ( CopyDest (NoCopyDest) )
 import Distribution.Simple.Setup
-         ( Flag(..), toFlag, fromFlagOrDefault
+         ( Flag(..), toFlag, maybeToFlag, flagToMaybe, fromFlagOrDefault
          , ConfigFlags(..), configureOptions
          , HaddockFlags(..), haddockOptions, defaultHaddockFlags
          , TestFlags(..), testOptions', defaultTestFlags
@@ -522,7 +522,7 @@ convertLegacyAllPackageFlags globalFlags configFlags configExFlags installFlags 
     --installReinstall          = projectConfigReinstall,
     --installAvoidReinstalls    = projectConfigAvoidReinstalls,
     --installOverrideReinstall  = projectConfigOverrideReinstall,
-      installIndexState         = projectConfigIndexState,
+      installIndexState         = indexStateFlag,
       installMaxBackjumps       = projectConfigMaxBackjumps,
     --installUpgradeDeps        = projectConfigUpgradeDeps,
       installReorderGoals       = projectConfigReorderGoals,
@@ -537,6 +537,8 @@ convertLegacyAllPackageFlags globalFlags configFlags configExFlags installFlags 
       installAllowBootLibInstalls = projectConfigAllowBootLibInstalls,
       installOnlyConstrained    = projectConfigOnlyConstrained
     } = installFlags
+
+    projectConfigIndexState = flagToMaybe indexStateFlag
 
     ProjectFlags
         { flagProjectFileName = projectConfigProjectFile
@@ -784,7 +786,7 @@ convertToLegacySharedConfig
       installOnlyConstrained   = projectConfigOnlyConstrained,
       installOnly              = mempty,
       installOnlyDeps          = projectConfigOnlyDeps,
-      installIndexState        = projectConfigIndexState,
+      installIndexState        = maybeToFlag projectConfigIndexState,
       installRootCmd           = mempty, --no longer supported
       installSummaryFile       = projectConfigSummaryFile,
       installLogFile           = projectConfigLogFile,

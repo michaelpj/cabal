@@ -181,7 +181,7 @@ data ProjectConfigShared
        projectConfigRemoteRepos       :: NubList RemoteRepo,     -- ^ Available Hackage servers.
        projectConfigLocalNoIndexRepos :: NubList LocalRepo,
        projectConfigActiveRepos       :: Flag ActiveRepos,
-       projectConfigIndexState        :: Flag TotalIndexState,
+       projectConfigIndexState        :: Maybe TotalIndexState,
        projectConfigStoreDir          :: Flag FilePath,
 
        -- solver configuration
