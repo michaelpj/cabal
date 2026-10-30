@@ -222,6 +222,7 @@ import qualified Distribution.Simple.LocalBuildInfo as Cabal
 import qualified Distribution.Simple.Setup as Cabal
 import qualified Distribution.Solver.Types.ComponentDeps as CD
 
+import qualified Distribution.Compat.Binary as Binary
 import qualified Distribution.Compat.Graph as Graph
 
 import Control.Exception (assert)
@@ -1721,6 +1722,8 @@ elaborateInstallPlan
     x <- elaboratedInstallPlan
     return (x, elaboratedSharedConfig)
     where
+      configuredProgramsHash = hashValue (Binary.encode (configuredPrograms compilerProgDb))
+
       elaboratedSharedConfig =
         ElaboratedSharedConfig
           { pkgConfigPlatform = platform
@@ -2474,7 +2477,7 @@ elaborateInstallPlan
                   )
                   (perPkgOptionMapMappend pkgid packageConfigProgramArgs)
             elabProgramPathExtra = perPkgOptionNubList pkgid packageConfigProgramPathExtra
-            elabConfiguredPrograms = configuredPrograms compilerProgDb
+            elabConfiguredProgramsHash = configuredProgramsHash
             elabConfigureScriptArgs = perPkgOptionList pkgid packageConfigConfigureArgs
             elabExtraLibDirs = perPkgOptionList pkgid packageConfigExtraLibDirs
             elabExtraLibDirsStatic = perPkgOptionList pkgid packageConfigExtraLibDirsStatic
